@@ -1391,6 +1391,10 @@ select{
 
     <!-- LEAVE BALANCE -->
 
+    <!-- HOME VIEW: CARDS + ADD FORM -->
+
+    <div id="plHomeView" class="pl-view">
+
     <div
       class="pl-leave-grid"
       id="plLeaveGrid">
@@ -1544,8 +1548,14 @@ select{
 
     </div>
 
+    </div>
 
-    <!-- RECORDS -->
+    <!-- /HOME VIEW -->
+
+
+    <!-- RECORDS VIEW -->
+
+    <div id="plRecordsView" class="pl-view" style="display:none;">
 
     <div class="pl-records">
 
@@ -1567,6 +1577,10 @@ select{
 
     </div>
 
+    </div>
+
+    <!-- /RECORDS VIEW -->
+
   </section>
 
 </div>
@@ -1578,9 +1592,10 @@ select{
 
   <button
     type="button"
-    class="pl-nav-item active"
-    onclick="document.getElementById('plRecords').scrollIntoView({behavior:'smooth',block:'start'})"
-    aria-label="Records">
+    id="plNavToggle"
+    class="pl-nav-item"
+    onclick="plToggleView()"
+    aria-label="Recent Leave Records">
 
     <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
     <span>Records</span>
@@ -3094,10 +3109,76 @@ function togglePlAddForm(){
 
 
 /* =========================================================
+   BOTTOM NAV — VIEW SWITCHER (Home / Records)
+========================================================= */
+
+let plCurrentView = 'home';
+
+const PL_NAV_ICON_RECORDS =
+  '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>Records</span>';
+
+const PL_NAV_ICON_HOME =
+  '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span>';
+
+function plShowView(view){
+
+  plCurrentView = view;
+
+  const home =
+    document.getElementById('plHomeView');
+
+  const records =
+    document.getElementById('plRecordsView');
+
+  const btn =
+    document.getElementById('plNavToggle');
+
+  if(view === 'records'){
+
+    if(home) home.style.display = 'none';
+    if(records) records.style.display = 'block';
+
+    if(btn){
+      btn.innerHTML = PL_NAV_ICON_HOME;
+      btn.setAttribute('aria-label','Back to leave balance');
+    }
+
+  }else{
+
+    if(home) home.style.display = 'block';
+    if(records) records.style.display = 'none';
+
+    if(btn){
+      btn.innerHTML = PL_NAV_ICON_RECORDS;
+      btn.setAttribute('aria-label','Recent Leave Records');
+    }
+
+  }
+
+  window.scrollTo({top:0,behavior:'smooth'});
+
+}
+
+function plToggleView(){
+
+  plShowView(
+    plCurrentView === 'home'
+      ? 'records'
+      : 'home'
+  );
+
+}
+
+
+/* =========================================================
    BOTTOM NAV — ADD BUTTON
 ========================================================= */
 
 function plBottomNavAdd(){
+
+  if(plCurrentView !== 'home'){
+    plShowView('home');
+  }
 
   togglePlAddForm();
 
