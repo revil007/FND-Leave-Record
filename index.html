@@ -1,0 +1,3535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Personal Leave Record</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#151C27;
+  --navy-2:#1F2937;
+  --navy-3:#2A3648;
+  --surface:#F2F3EE;
+  --card:#FFFFFF;
+  --ink:#171B22;
+  --muted:#6B7280;
+  --border:#E5E7E0;
+
+  --red:#D6484B;
+  --red-bg:#FBE7E7;
+  --green:#2F8F5B;
+  --green-bg:#E3F3EA;
+
+  --radius:18px;
+
+  --shadow-sm:
+    0 1px 2px rgba(16,20,28,.05),
+    0 1px 3px rgba(16,20,28,.06);
+
+  --shadow-lg:
+    0 14px 34px rgba(16,20,28,.14),
+    0 4px 10px rgba(16,20,28,.08);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  overflow-x:hidden;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--surface);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,
+input,
+select{
+  font-family:'Inter',sans-serif;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:min(1100px,100%);
+  margin:0 auto;
+  padding:28px 22px 50px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.header-left{
+  min-width:0;
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.title{
+  font-size:25px;
+  font-weight:800;
+  color:var(--navy);
+  letter-spacing:-.5px;
+}
+
+.subtitle{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.pl-settings-btn{
+  -webkit-appearance:none;
+  appearance:none;
+
+  width:42px;
+  height:42px;
+
+  flex-shrink:0;
+
+  border:1px solid var(--border);
+  border-radius:11px;
+
+  background:#fff;
+  color:#475569;
+
+  font-size:18px;
+  cursor:pointer;
+
+  box-shadow:
+    0 2px 7px rgba(15,23,42,.05);
+
+  transition:.15s ease;
+}
+
+.pl-settings-btn:hover{
+  transform:translateY(-1px);
+  background:var(--surface);
+  border-color:#cbd5e1;
+}
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.leave-container{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow-sm);
+}
+
+/* =========================================================
+   LEAVE CARDS
+========================================================= */
+
+.pl-leave-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.pl-card{
+  -webkit-appearance:none;
+  appearance:none;
+
+  position:relative;
+
+  min-height:164px;
+
+  border:1px solid var(--border);
+  border-radius:18px;
+
+  background:#fff;
+
+  padding:18px;
+
+  text-align:left;
+  cursor:pointer;
+
+  overflow:hidden;
+
+  transition:.18s ease;
+
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+.pl-card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 28px rgba(15,23,42,.07);
+
+  border-color:#d5dce6;
+}
+
+.pl-card::after{
+  content:'';
+
+  position:absolute;
+
+  width:105px;
+  height:105px;
+
+  border-radius:50%;
+
+  right:-28px;
+  bottom:-38px;
+
+  background:var(--pl-icon-bg);
+}
+
+.pl-icon{
+  width:39px;
+  height:39px;
+
+  border-radius:11px;
+
+  background:var(--pl-icon-bg);
+  color:var(--pl-accent);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:22px;
+
+  position:relative;
+  z-index:1;
+}
+
+.pl-icon svg{
+  width:20px;
+  height:20px;
+
+  fill:none;
+  stroke:currentColor;
+
+  stroke-width:1.8;
+
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.pl-balance{
+  font-weight:800;
+  font-size:24px;
+
+  letter-spacing:-.6px;
+
+  color:var(--pl-accent);
+
+  line-height:1.2;
+
+  word-break:break-word;
+
+  position:relative;
+  z-index:1;
+}
+
+.pl-balance.negative{
+  color:var(--red) !important;
+}
+
+.pl-available{
+  font-size:9px;
+
+  color:var(--muted);
+
+  font-weight:800;
+
+  letter-spacing:.12em;
+
+  margin-top:7px;
+
+  position:relative;
+  z-index:1;
+}
+
+.pl-arrow{
+  position:absolute;
+
+  right:16px;
+  bottom:14px;
+
+  color:#a2aabb;
+
+  z-index:2;
+
+  font-size:14px;
+}
+
+/* =========================================================
+   ADD FORM
+========================================================= */
+
+.pl-add-section{
+  padding-top:18px;
+
+  border-top:1px solid var(--border);
+}
+
+.pl-add-toggle{
+  -webkit-appearance:none;
+  appearance:none;
+
+  display:block;
+
+  width:100%;
+
+  text-align:left;
+
+  background:var(--surface);
+
+  border:1px dashed var(--border);
+
+  border-radius:9px;
+
+  padding:12px 14px;
+
+  font-weight:700;
+  font-size:13px;
+
+  color:var(--navy);
+
+  cursor:pointer;
+
+  margin-bottom:14px;
+}
+
+.pl-add-toggle:hover{
+  background:#eef1f5;
+  border-color:#c9d0da;
+}
+
+.pl-add-toggle.open{
+  background:var(--navy);
+
+  color:#fff;
+
+  border-style:solid;
+
+  border-color:var(--navy);
+}
+
+.pl-form{
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(120px,1fr));
+
+  gap:9px;
+
+  align-items:end;
+}
+
+.pl-field{
+  display:flex;
+  flex-direction:column;
+
+  gap:5px;
+
+  min-width:0;
+}
+
+.pl-field-narrow{
+  max-width:150px;
+}
+
+.pl-field-wide{
+  grid-column:1 / -1;
+}
+
+.pl-field label{
+  font-size:10px;
+
+  font-weight:700;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+
+  letter-spacing:.03em;
+}
+
+.pl-field select,
+.pl-field input{
+  width:100%;
+
+  padding:10px;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  font-size:14px;
+
+  box-sizing:border-box;
+
+  outline:none;
+}
+
+.pl-field select:focus,
+.pl-field input:focus{
+  border-color:#9ca3af;
+
+  box-shadow:
+    0 0 0 3px rgba(21,28,39,.05);
+}
+
+.pl-add-btn{
+  border:0;
+
+  border-radius:9px;
+
+  padding:10px 14px;
+
+  background:var(--navy);
+
+  color:#fff;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  font-size:13px;
+
+  white-space:nowrap;
+
+  grid-column:1 / -1;
+}
+
+.pl-add-btn:hover{
+  background:var(--navy-3);
+}
+
+.pl-add-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+/* =========================================================
+   RECORDS
+========================================================= */
+
+.pl-records{
+  margin-top:18px;
+
+  background:#fff;
+
+  border:1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:18px;
+}
+
+.pl-records-head{
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:2px;
+}
+
+.pl-records-head strong{
+  font-size:14px;
+  color:var(--ink);
+}
+
+.pl-line{
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  border-top:1px solid #f0f2f5;
+
+  padding:11px 0;
+
+  margin-top:12px;
+
+  font-size:12px;
+
+  gap:10px;
+}
+
+.pl-line:first-child{
+  border-top:none;
+
+  margin-top:0;
+
+  padding-top:0;
+}
+
+.pl-line-left{
+  min-width:0;
+}
+
+.pl-line-left b{
+  font-size:13px;
+
+  color:var(--ink);
+}
+
+.pl-line-muted{
+  color:var(--muted);
+
+  font-size:10px;
+
+  margin-top:3px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.pl-line-right{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  flex-shrink:0;
+}
+
+.pl-line-right b{
+  font-size:13px;
+  color:var(--navy);
+}
+
+.pl-delete{
+  -webkit-appearance:none;
+  appearance:none;
+
+  background:none;
+
+  border:none;
+
+  outline:none;
+
+  box-shadow:none;
+
+  color:var(--muted);
+
+  position:relative;
+
+  cursor:pointer;
+
+  padding:0;
+  margin:0;
+
+  width:22px;
+  height:22px;
+
+  min-width:0;
+  max-width:22px;
+
+  border-radius:6px;
+
+  flex:0 0 22px;
+
+  box-sizing:border-box;
+}
+
+.pl-delete::before,
+.pl-delete::after{
+  content:'';
+
+  position:absolute;
+
+  top:50%;
+  left:50%;
+
+  width:11px;
+  height:2px;
+
+  border-radius:2px;
+
+  background:currentColor;
+}
+
+.pl-delete::before{
+  transform:
+    translate(-50%,-50%)
+    rotate(45deg);
+}
+
+.pl-delete::after{
+  transform:
+    translate(-50%,-50%)
+    rotate(-45deg);
+}
+
+.pl-delete:hover{
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.pl-overlay{
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(15,23,42,.45);
+
+  backdrop-filter:blur(3px);
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:18px;
+
+  z-index:200;
+}
+
+.pl-modal{
+  width:min(460px,100%);
+
+  max-height:88vh;
+
+  overflow-y:auto;
+
+  background:#fff;
+
+  border-radius:20px;
+
+  padding:22px;
+
+  position:relative;
+
+  box-shadow:
+    0 25px 70px rgba(15,23,42,.2);
+}
+
+.pl-settings-modal{
+  width:min(500px,100%);
+}
+
+.pl-close{
+  -webkit-appearance:none;
+  appearance:none;
+
+  position:absolute;
+
+  right:14px;
+  top:14px;
+
+  width:32px;
+  height:32px;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  background:#fff;
+
+  cursor:pointer;
+}
+
+.pl-close::before,
+.pl-close::after{
+  content:'';
+
+  position:absolute;
+
+  top:50%;
+  left:50%;
+
+  width:13px;
+  height:2.2px;
+
+  border-radius:2px;
+
+  background:var(--ink);
+}
+
+.pl-close::before{
+  transform:
+    translate(-50%,-50%)
+    rotate(45deg);
+}
+
+.pl-close::after{
+  transform:
+    translate(-50%,-50%)
+    rotate(-45deg);
+}
+
+.pl-close:hover{
+  background:var(--surface);
+}
+
+.pl-modal-head{
+  display:flex;
+
+  gap:12px;
+
+  align-items:center;
+}
+
+.pl-modal-icon{
+  width:46px;
+  height:46px;
+
+  border-radius:13px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  background:
+    var(--pl-icon-bg,var(--surface));
+
+  color:
+    var(--pl-accent,var(--navy));
+}
+
+.pl-modal-icon svg{
+  width:22px;
+  height:22px;
+
+  fill:none;
+
+  stroke:currentColor;
+
+  stroke-width:1.8;
+
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.pl-modal-title{
+  font-size:19px;
+
+  font-weight:800;
+
+  color:var(--navy);
+}
+
+.pl-modal-sub{
+  font-size:11px;
+
+  color:var(--muted);
+
+  margin-top:2px;
+}
+
+.pl-available-box{
+  margin-top:17px;
+
+  padding:15px;
+
+  border-radius:13px;
+
+  background:#f8fafc;
+
+  border:1px solid var(--border);
+}
+
+.pl-available-box span{
+  display:block;
+
+  font-size:9px;
+
+  color:var(--muted);
+
+  font-weight:800;
+
+  letter-spacing:.05em;
+}
+
+.pl-available-box strong{
+  font-size:29px;
+
+  display:block;
+
+  margin-top:4px;
+
+  color:var(--ink);
+}
+
+.pl-detail-grid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:9px;
+
+  margin-top:12px;
+}
+
+.pl-detail{
+  border:1px solid var(--border);
+
+  border-radius:10px;
+
+  padding:11px;
+}
+
+.pl-detail span{
+  display:block;
+
+  font-size:9px;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+
+  font-weight:800;
+
+  letter-spacing:.04em;
+}
+
+.pl-detail strong{
+  display:block;
+
+  margin-top:4px;
+
+  font-size:14px;
+
+  color:var(--ink);
+}
+
+.pl-note{
+  margin-top:12px;
+
+  padding:10px 12px;
+
+  border-radius:8px;
+
+  background:var(--surface);
+
+  color:var(--muted);
+
+  border:1px solid var(--border);
+
+  font-size:11px;
+
+  line-height:1.5;
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.pl-settings-section-title{
+  margin-top:18px;
+
+  margin-bottom:8px;
+
+  font-size:11px;
+
+  color:var(--muted);
+
+  font-weight:800;
+
+  text-transform:uppercase;
+
+  letter-spacing:.06em;
+}
+
+.pl-settings-list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.pl-setting-row{
+  display:grid;
+
+  grid-template-columns:1fr auto;
+
+  gap:12px;
+
+  align-items:center;
+
+  padding:12px;
+
+  border:1px solid var(--border);
+
+  border-radius:11px;
+}
+
+.pl-setting-name{
+  font-weight:700;
+
+  font-size:13px;
+
+  color:var(--ink);
+}
+
+.pl-setting-desc{
+  font-size:10px;
+
+  color:var(--muted);
+
+  margin-top:3px;
+}
+
+.pl-setting-inputs{
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  flex-wrap:wrap;
+
+  justify-content:flex-end;
+}
+
+.pl-setting-inputs input{
+  width:64px;
+
+  padding:8px;
+
+  border:1px solid var(--border);
+
+  border-radius:8px;
+
+  font-size:13px;
+
+  font-family:'IBM Plex Mono',monospace;
+}
+
+.pl-setting-inputs select{
+  width:88px;
+
+  padding:8px;
+
+  border:1px solid var(--border);
+
+  border-radius:8px;
+
+  font-size:12px;
+
+  background:#fff;
+}
+
+.pl-setting-inputs span{
+  font-size:11px;
+
+  color:var(--muted);
+}
+
+.pl-settings-actions{
+  display:flex;
+
+  justify-content:flex-end;
+
+  gap:8px;
+
+  margin-top:18px;
+}
+
+.pl-settings-cancel{
+  -webkit-appearance:none;
+
+  border:1px solid var(--border);
+
+  background:#fff;
+
+  color:var(--navy);
+
+  border-radius:9px;
+
+  padding:10px 14px;
+
+  cursor:pointer;
+
+  font-size:13px;
+}
+
+.pl-settings-save{
+  -webkit-appearance:none;
+
+  border:0;
+
+  background:var(--navy);
+
+  color:#fff;
+
+  border-radius:9px;
+
+  padding:10px 16px;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  font-size:13px;
+}
+
+.pl-settings-save:hover{
+  background:var(--navy-3);
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+  margin-bottom:14px;
+
+  padding:9px 12px;
+
+  border-radius:9px;
+
+  font-size:11px;
+
+  display:none;
+}
+
+.status.show{
+  display:block;
+}
+
+.status.error{
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+.status.success{
+  background:var(--green-bg);
+  color:var(--green);
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+  padding:35px 15px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+.empty{
+  color:var(--muted);
+
+  font-size:13px;
+
+  font-style:italic;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px){
+
+  .pl-leave-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:600px){
+
+  .page{
+    padding:
+      18px
+      14px
+      35px;
+  }
+
+  .leave-container{
+    padding:16px 14px;
+  }
+
+  .title{
+    font-size:21px;
+  }
+
+  .pl-leave-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .pl-card{
+    min-height:145px;
+    padding:14px;
+  }
+
+  .pl-balance{
+    font-size:21px;
+  }
+
+  .pl-form{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .pl-field-narrow{
+    max-width:none;
+  }
+
+}
+
+@media(max-width:430px){
+
+  .header{
+    align-items:flex-start;
+  }
+
+  .pl-leave-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .pl-form{
+    grid-template-columns:1fr;
+  }
+
+  .pl-field-wide{
+    grid-column:auto;
+  }
+
+  .pl-add-btn{
+    grid-column:auto;
+  }
+
+  .pl-setting-row{
+    grid-template-columns:1fr;
+  }
+
+  .pl-setting-inputs{
+    justify-content:flex-start;
+  }
+
+  .pl-detail-grid{
+    grid-template-columns:1fr;
+  }
+
+  .pl-line{
+    align-items:flex-start;
+  }
+
+  .pl-line-right{
+    flex-direction:column;
+    align-items:flex-end;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <div class="header-left">
+
+      <div class="eyebrow">
+        Personal Record
+      </div>
+
+      <div class="title">
+        Personal Leave
+      </div>
+
+      <div class="subtitle">
+        Leave records &mdash; leave balance overview
+      </div>
+
+    </div>
+
+    <button
+      class="pl-settings-btn"
+      onclick="plShowSettings()"
+      title="Leave Settings"
+      aria-label="Leave Settings">
+      ⚙
+    </button>
+
+  </header>
+
+
+  <!-- STATUS -->
+
+  <div
+    id="statusMessage"
+    class="status">
+  </div>
+
+
+  <!-- MAIN -->
+
+  <section class="leave-container">
+
+    <!-- LEAVE BALANCE -->
+
+    <div
+      class="pl-leave-grid"
+      id="plLeaveGrid">
+
+      <div class="loading">
+        Loading leave balance...
+      </div>
+
+    </div>
+
+
+    <!-- ADD LEAVE -->
+
+    <div class="pl-add-section">
+
+      <button
+        class="pl-add-toggle"
+        onclick="togglePlAddForm()"
+        id="plAddToggle">
+
+        + Add Leave Record
+
+      </button>
+
+
+      <div
+        class="pl-form"
+        id="plAddForm"
+        style="display:none;">
+
+        <div class="pl-field">
+
+          <label for="plType">
+            Leave Type
+          </label>
+
+          <select id="plType">
+
+            <option>
+              Annual Leave
+            </option>
+
+            <option>
+              Medical Leave
+            </option>
+
+            <option>
+              Hospitalization
+            </option>
+
+            <option>
+              Compassionate Leave
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="pl-field">
+
+          <label for="plDate">
+            Date
+          </label>
+
+          <input
+            type="date"
+            id="plDate">
+
+        </div>
+
+
+        <div class="pl-field pl-field-narrow">
+
+          <label for="plUnit">
+            Unit
+          </label>
+
+          <select
+            id="plUnit"
+            onchange="togglePlUnit()">
+
+            <option value="days">
+              Days
+            </option>
+
+            <option value="hours">
+              Hours
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          class="pl-field pl-field-narrow"
+          id="plDaysField">
+
+          <label for="plDays">
+            Days
+          </label>
+
+          <input
+            type="number"
+            id="plDays"
+            min="0.5"
+            step="0.5"
+            placeholder="1">
+
+        </div>
+
+
+        <div
+          class="pl-field pl-field-narrow"
+          id="plHoursField"
+          style="display:none;">
+
+          <label for="plHours">
+            Duration
+          </label>
+
+          <select id="plHours"></select>
+
+        </div>
+
+
+        <div class="pl-field pl-field-wide">
+
+          <label for="plRemark">
+            Remarks
+          </label>
+
+          <input
+            type="text"
+            id="plRemark"
+            placeholder="Optional">
+
+        </div>
+
+
+        <button
+          class="pl-add-btn"
+          onclick="addPlRecord()">
+
+          + Add Record
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- RECORDS -->
+
+    <div class="pl-records">
+
+      <div class="pl-records-head">
+
+        <strong>
+          Recent Leave Records
+        </strong>
+
+      </div>
+
+      <div id="plRecords">
+
+        <div class="loading">
+          Loading records...
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   NEW PERSONAL LEAVE APPS SCRIPT API
+========================================================= */
+
+const CONFIG = {
+
+  API_URL:
+    'https://script.google.com/macros/s/AKfycbxUO9L21XdRmb0k9ig6Svd7Eq-RD1J8vKn5vagZons0IcimbWGu8-D-QhGC_NOXbnY/exec'
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let STATE = {
+
+  leaveRecords: [],
+
+  leaveSettings: null
+
+};
+
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const PL_WORK_HOURS = 8;
+
+
+const PL_TYPES = [
+
+  'Annual Leave',
+
+  'Medical Leave',
+
+  'Hospitalization',
+
+  'Compassionate Leave'
+
+];
+
+
+const PL_ICONS = {
+
+  'Annual Leave':
+    '<svg viewBox="0 0 24 24">' +
+    '<rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/>' +
+    '<path d="M7.5 2.8v3.4M16.5 2.8v3.4M3.5 9h17M8 13l2 2 5-5"/>' +
+    '</svg>',
+
+  'Medical Leave':
+    '<svg viewBox="0 0 24 24">' +
+    '<path d="M9 3h6v5h5v6h-5v5H9v-5H4V8h5z"/>' +
+    '</svg>',
+
+  'Hospitalization':
+    '<svg viewBox="0 0 24 24">' +
+    '<path d="M5 20V5.5A1.5 1.5 0 0 1 6.5 4h11A1.5 1.5 0 0 1 19 5.5V20M3 20h18M9 20v-4h6v4M10 8h4M12 6v4"/>' +
+    '</svg>',
+
+  'Compassionate Leave':
+    '<svg viewBox="0 0 24 24">' +
+    '<path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7z"/>' +
+    '</svg>'
+
+};
+
+
+const PL_ACCENTS = {
+
+  'Annual Leave':
+    ['#2563eb','#eff6ff'],
+
+  'Medical Leave':
+    ['#16a34a','#f0fdf4'],
+
+  'Hospitalization':
+    ['#dc2626','#fef2f2'],
+
+  'Compassionate Leave':
+    ['#7c3aed','#f5f3ff']
+
+};
+
+
+const PL_DEFAULT_SETTINGS = {
+
+  annual:14,
+
+  medical:14,
+
+  hospitalization:60,
+
+  compassionate:3,
+
+  carryDays:0,
+
+  carryHours:0,
+
+  openingUsed:0,
+
+  openingUsedHours:0
+
+};
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function getPlSettings(){
+
+  return Object.assign(
+    {},
+    PL_DEFAULT_SETTINGS,
+    STATE.leaveSettings || {}
+  );
+
+}
+
+
+/* =========================================================
+   RECORDS
+========================================================= */
+
+function getPlRecords(){
+
+  return (STATE.leaveRecords || [])
+    .map(r => ({
+
+      id:r.ID,
+
+      type:r.Type,
+
+      date:r.Date,
+
+      unit:r.Unit || 'days',
+
+      amount:Number(r.Amount) || 0,
+
+      remark:r.Remark || ''
+
+    }));
+
+}
+
+
+/* =========================================================
+   FORMAT DURATION
+========================================================= */
+
+function plFormatDuration(days){
+
+  const isNegative =
+    days < -1e-9;
+
+
+  let absDays =
+    Math.abs(days);
+
+
+  let wholeDays =
+    Math.floor(
+      absDays + 1e-9
+    );
+
+
+  let remainderHours =
+    Math.round(
+      (absDays - wholeDays)
+      * PL_WORK_HOURS
+      * 2
+    ) / 2;
+
+
+  if(
+    remainderHours >=
+    PL_WORK_HOURS - 1e-9
+  ){
+
+    wholeDays += 1;
+
+    remainderHours = 0;
+
+  }
+
+
+  const wholeHours =
+    Math.floor(
+      remainderHours + 1e-9
+    );
+
+
+  const hasHalfHour =
+    (remainderHours - wholeHours)
+    >= 0.5 - 1e-9;
+
+
+  const parts = [];
+
+
+  if(wholeDays > 0){
+
+    parts.push(
+      wholeDays +
+      (
+        wholeDays === 1
+          ? ' day'
+          : ' days'
+      )
+    );
+
+  }
+
+
+  if(wholeHours > 0){
+
+    parts.push(
+      wholeHours +
+      (
+        wholeHours === 1
+          ? ' hour'
+          : ' hours'
+      )
+    );
+
+  }
+
+
+  if(hasHalfHour){
+
+    parts.push('30 min');
+
+  }
+
+
+  if(parts.length === 0){
+
+    parts.push('0 days');
+
+  }
+
+
+  return (
+    isNegative ? '-' : ''
+  ) +
+  parts.join(' ');
+
+}
+
+
+/* =========================================================
+   RECORD TO DAYS
+========================================================= */
+
+function plRecordToDays(r){
+
+  if(r.unit === 'hours'){
+
+    return Number(
+      r.amount || 0
+    ) / PL_WORK_HOURS;
+
+  }
+
+
+  return Number(
+    r.amount || 0
+  );
+
+}
+
+
+/* =========================================================
+   RECORD LABEL
+========================================================= */
+
+function plRecordLabel(r){
+
+  if(r.unit === 'hours'){
+
+    const h =
+      Number(r.amount || 0);
+
+
+    const whole =
+      Math.floor(h);
+
+
+    const hasHalf =
+      (h - whole)
+      >= 0.5 - 1e-9;
+
+
+    return (
+      whole +
+      (
+        whole === 1
+          ? ' hour'
+          : ' hours'
+      ) +
+      (
+        hasHalf
+          ? ' 30 min'
+          : ''
+      )
+    );
+
+  }
+
+
+  return plFormatDuration(
+    Number(r.amount || 0)
+  );
+
+}
+
+
+/* =========================================================
+   ENTITLEMENT
+========================================================= */
+
+function plGetEntitlement(type){
+
+  const s =
+    getPlSettings();
+
+
+  if(type === 'Annual Leave')
+    return Number(s.annual) || 0;
+
+
+  if(type === 'Medical Leave')
+    return Number(s.medical) || 0;
+
+
+  if(type === 'Hospitalization')
+    return Number(s.hospitalization) || 0;
+
+
+  if(type === 'Compassionate Leave')
+    return Number(s.compassionate) || 0;
+
+
+  return 0;
+
+}
+
+
+/* =========================================================
+   CARRY FORWARD
+========================================================= */
+
+function plGetCarryForward(){
+
+  const s =
+    getPlSettings();
+
+
+  return (
+    Number(s.carryDays) || 0
+  ) +
+  (
+    Number(s.carryHours) || 0
+  ) / PL_WORK_HOURS;
+
+}
+
+
+/* =========================================================
+   OPENING USED
+========================================================= */
+
+function plGetOpeningUsed(){
+
+  const s =
+    getPlSettings();
+
+
+  return (
+    Number(s.openingUsed) || 0
+  ) +
+  (
+    Number(s.openingUsedHours) || 0
+  ) / PL_WORK_HOURS;
+
+}
+
+
+/* =========================================================
+   ANNUAL ACCRUAL
+========================================================= */
+
+function plAnnualAccrued(){
+
+  const now =
+    new Date();
+
+
+  const usableMonths =
+    Math.max(
+      0,
+      Math.min(
+        12,
+        now.getMonth()
+      )
+    );
+
+
+  return (
+    plGetEntitlement(
+      'Annual Leave'
+    ) / 12
+  ) *
+  usableMonths;
+
+}
+
+
+/* =========================================================
+   USED
+========================================================= */
+
+function plGetUsed(type){
+
+  return getPlRecords()
+
+    .filter(
+      r => r.type === type
+    )
+
+    .reduce(
+      (sum,r) =>
+        sum + plRecordToDays(r),
+      0
+    );
+
+}
+
+
+/* =========================================================
+   BALANCE
+========================================================= */
+
+function plGetBalance(type){
+
+  if(type === 'Annual Leave'){
+
+    return (
+      plGetCarryForward() +
+      plAnnualAccrued() -
+      plGetOpeningUsed() -
+      plGetUsed(type)
+    );
+
+  }
+
+
+  return (
+    plGetEntitlement(type) -
+    plGetUsed(type)
+  );
+
+}
+
+
+/* =========================================================
+   RENDER BALANCE
+========================================================= */
+
+function renderPersonalLeave(){
+
+  const grid =
+    document.getElementById(
+      'plLeaveGrid'
+    );
+
+
+  if(!grid)
+    return;
+
+
+  grid.innerHTML =
+    PL_TYPES
+      .map(type => {
+
+        const [
+          accent,
+          bg
+        ] =
+          PL_ACCENTS[type];
+
+
+        const balance =
+          plGetBalance(type);
+
+
+        return `
+
+          <button
+            type="button"
+            class="pl-card"
+            style="
+              --pl-accent:${accent};
+              --pl-icon-bg:${bg};
+            "
+            onclick="
+              plShowDetails('${type}')
+            ">
+
+            <div class="pl-icon">
+              ${PL_ICONS[type]}
+            </div>
+
+            <div
+              class="pl-balance
+                ${balance < 0 ? 'negative' : ''}">
+
+              ${plFormatDuration(balance)}
+
+            </div>
+
+            <div class="pl-available">
+              AVAILABLE
+            </div>
+
+            <div class="pl-arrow">
+              ↗
+            </div>
+
+          </button>
+
+        `;
+
+      })
+      .join('');
+
+
+  renderPlRecords();
+
+}
+
+
+/* =========================================================
+   RENDER RECORDS
+========================================================= */
+
+function renderPlRecords(){
+
+  const box =
+    document.getElementById(
+      'plRecords'
+    );
+
+
+  if(!box)
+    return;
+
+
+  const records =
+    getPlRecords();
+
+
+  if(records.length === 0){
+
+    box.innerHTML = `
+
+      <div
+        class="empty"
+        style="
+          text-align:center;
+          padding:14px 0;
+        ">
+
+        No leave records yet
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const sorted =
+    records
+      .slice()
+      .sort(
+        (a,b) =>
+          String(b.date || '')
+            .localeCompare(
+              String(a.date || '')
+            )
+      );
+
+
+  box.innerHTML =
+    sorted
+      .map(r => `
+
+        <div class="pl-line">
+
+          <div class="pl-line-left">
+
+            <b>
+              ${escapeHtml(r.type)}
+            </b>
+
+            <div class="pl-line-muted">
+
+              ${formatDate(r.date)}
+
+              ${
+                r.remark
+                  ? ' · ' +
+                    escapeHtml(r.remark)
+                  : ''
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="pl-line-right">
+
+            <b>
+              ${plRecordLabel(r)}
+            </b>
+
+            <button
+              class="pl-delete"
+              onclick="
+                plDeleteRecord(
+                  '${String(r.id)
+                    .replace(/'/g,"\\'")}'
+                )
+              "
+              title="Delete record">
+            </button>
+
+          </div>
+
+        </div>
+
+      `)
+      .join('');
+
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+function plShowDetails(type){
+
+  const used =
+    plGetUsed(type);
+
+
+  const entitlement =
+    plGetEntitlement(type);
+
+
+  const available =
+    plGetBalance(type);
+
+
+  const carried =
+    type === 'Annual Leave'
+      ? plGetCarryForward()
+      : 0;
+
+
+  const opening =
+    type === 'Annual Leave'
+      ? plGetOpeningUsed()
+      : 0;
+
+
+  const [
+    accent,
+    bg
+  ] =
+    PL_ACCENTS[type];
+
+
+  const overlay =
+    document.createElement('div');
+
+
+  overlay.className =
+    'pl-overlay';
+
+
+  overlay.onclick =
+    (e) => {
+
+      if(
+        e.target === overlay
+      ){
+
+        overlay.remove();
+
+      }
+
+    };
+
+
+  overlay.innerHTML = `
+
+    <div
+      class="pl-modal"
+      style="
+        --pl-accent:${accent};
+        --pl-icon-bg:${bg};
+      ">
+
+      <button
+        class="pl-close"
+        onclick="
+          this
+            .closest('.pl-overlay')
+            .remove()
+        "
+        title="Close">
+      </button>
+
+
+      <div class="pl-modal-head">
+
+        <div class="pl-modal-icon">
+
+          ${PL_ICONS[type]}
+
+        </div>
+
+
+        <div>
+
+          <div class="pl-modal-title">
+            ${type}
+          </div>
+
+          <div class="pl-modal-sub">
+            Leave details
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="pl-available-box">
+
+        <span>
+          AVAILABLE NOW
+        </span>
+
+        <strong>
+          ${plFormatDuration(available)}
+        </strong>
+
+      </div>
+
+
+      <div class="pl-detail-grid">
+
+        <div class="pl-detail">
+
+          <span>
+            Entitlement
+          </span>
+
+          <strong>
+            ${plFormatDuration(entitlement)}
+          </strong>
+
+        </div>
+
+
+        <div class="pl-detail">
+
+          <span>
+            Used
+          </span>
+
+          <strong>
+            ${plFormatDuration(used)}
+          </strong>
+
+        </div>
+
+
+        <div class="pl-detail">
+
+          <span>
+            Carried Forward
+          </span>
+
+          <strong>
+            ${plFormatDuration(carried)}
+          </strong>
+
+        </div>
+
+
+        <div class="pl-detail">
+
+          <span>
+            Already Used
+          </span>
+
+          <strong>
+            ${plFormatDuration(opening)}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      ${
+        type === 'Annual Leave'
+          ? `
+            <div class="pl-note">
+
+              Monthly accrual updates
+              automatically.
+
+            </div>
+          `
+          : ''
+      }
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    overlay
+  );
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function plShowSettings(){
+
+  const s =
+    getPlSettings();
+
+
+  const modal =
+    document.createElement('div');
+
+
+  modal.className =
+    'pl-overlay';
+
+
+  modal.id =
+    'plSettingsOverlay';
+
+
+  modal.onclick =
+    (e) => {
+
+      if(
+        e.target === modal
+      ){
+
+        modal.remove();
+
+      }
+
+    };
+
+
+  const buildHourOpts =
+    (selected) => [
+
+      0,
+      0.5,
+      1,
+      1.5,
+      2,
+      2.5,
+      3,
+      3.5,
+      4,
+      4.5,
+      5,
+      5.5,
+      6,
+      6.5,
+      7,
+      7.5
+
+    ]
+      .map(
+        h => `
+
+          <option
+            value="${h}"
+            ${
+              Number(selected) === h
+                ? 'selected'
+                : ''
+            }>
+
+            ${h} hours
+
+          </option>
+
+        `
+      )
+      .join('');
+
+
+  modal.innerHTML = `
+
+    <div class="pl-modal pl-settings-modal">
+
+      <button
+        class="pl-close"
+        onclick="
+          this
+            .closest('.pl-overlay')
+            .remove()
+        "
+        title="Close">
+      </button>
+
+
+      <div class="pl-modal-head">
+
+        <div class="pl-modal-icon">
+          ⚙️
+        </div>
+
+        <div>
+
+          <div class="pl-modal-title">
+            Leave Settings
+          </div>
+
+          <div class="pl-modal-sub">
+            Manage leave entitlement
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="pl-settings-section-title">
+        Leave Entitlement
+      </div>
+
+
+      <div class="pl-settings-list">
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Annual Leave
+            </div>
+
+            <div class="pl-setting-desc">
+              Annual entitlement
+            </div>
+
+          </div>
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetAnnual"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.annual}">
+
+            <span>
+              days
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Medical Leave
+            </div>
+
+          </div>
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetMedical"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.medical}">
+
+            <span>
+              days
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Hospitalization
+            </div>
+
+          </div>
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetHosp"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.hospitalization}">
+
+            <span>
+              days
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Compassionate Leave
+            </div>
+
+          </div>
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetComp"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.compassionate}">
+
+            <span>
+              days
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="pl-settings-section-title">
+        Annual Leave
+      </div>
+
+
+      <div class="pl-settings-list">
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Carried Forward
+            </div>
+
+            <div class="pl-setting-desc">
+              Balance carried over
+            </div>
+
+          </div>
+
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetCarryDays"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.carryDays}">
+
+            <span>
+              days
+            </span>
+
+            <select
+              id="plSetCarryHours">
+
+              ${buildHourOpts(s.carryHours)}
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="pl-setting-row">
+
+          <div>
+
+            <div class="pl-setting-name">
+              Already Used
+            </div>
+
+            <div class="pl-setting-desc">
+              Leave taken before tracker
+            </div>
+
+          </div>
+
+
+          <div class="pl-setting-inputs">
+
+            <input
+              id="plSetOpeningUsed"
+              type="number"
+              min="0"
+              step="0.5"
+              value="${s.openingUsed}">
+
+            <span>
+              days
+            </span>
+
+            <select
+              id="plSetOpeningUsedHours">
+
+              ${buildHourOpts(
+                s.openingUsedHours
+              )}
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="pl-settings-actions">
+
+        <button
+          class="pl-settings-cancel"
+          onclick="
+            this
+              .closest('.pl-overlay')
+              .remove()
+          ">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          class="pl-settings-save"
+          onclick="plSaveSettings()">
+
+          Save
+
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    modal
+  );
+
+}
+
+
+/* =========================================================
+   SAVE SETTINGS
+========================================================= */
+
+async function plSaveSettings(){
+
+  const settings = {
+
+    annual:
+      Number(
+        document.getElementById(
+          'plSetAnnual'
+        ).value
+      ) || 0,
+
+    medical:
+      Number(
+        document.getElementById(
+          'plSetMedical'
+        ).value
+      ) || 0,
+
+    hospitalization:
+      Number(
+        document.getElementById(
+          'plSetHosp'
+        ).value
+      ) || 0,
+
+    compassionate:
+      Number(
+        document.getElementById(
+          'plSetComp'
+        ).value
+      ) || 0,
+
+    carryDays:
+      Number(
+        document.getElementById(
+          'plSetCarryDays'
+        ).value
+      ) || 0,
+
+    carryHours:
+      Number(
+        document.getElementById(
+          'plSetCarryHours'
+        ).value
+      ) || 0,
+
+    openingUsed:
+      Number(
+        document.getElementById(
+          'plSetOpeningUsed'
+        ).value
+      ) || 0,
+
+    openingUsedHours:
+      Number(
+        document.getElementById(
+          'plSetOpeningUsedHours'
+        ).value
+      ) || 0
+
+  };
+
+
+  const saveBtn =
+    document.querySelector(
+      '.pl-settings-save'
+    );
+
+
+  if(saveBtn){
+
+    saveBtn.disabled = true;
+
+    saveBtn.textContent =
+      'Saving...';
+
+  }
+
+
+  try{
+
+    const result =
+      await apiPost({
+
+        action:
+          'saveLeaveSettings',
+
+        ...settings
+
+      });
+
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        'Unable to save settings.'
+      );
+
+    }
+
+
+    const overlay =
+      document.getElementById(
+        'plSettingsOverlay'
+      );
+
+
+    if(overlay)
+      overlay.remove();
+
+
+    showStatus(
+      'Leave settings saved.',
+      'success'
+    );
+
+
+    await loadData();
+
+  }catch(err){
+
+    console.error(err);
+
+    showStatus(
+      err.message ||
+      'Unable to save leave settings.',
+      'error'
+    );
+
+
+    if(saveBtn){
+
+      saveBtn.disabled = false;
+
+      saveBtn.textContent =
+        'Save';
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   HOURS
+========================================================= */
+
+function plPopulateHoursInput(){
+
+  const sel =
+    document.getElementById(
+      'plHours'
+    );
+
+
+  if(!sel)
+    return;
+
+
+  if(sel.options.length > 0)
+    return;
+
+
+  const opts = [];
+
+
+  for(
+    let h = 0.5;
+    h <= PL_WORK_HOURS;
+    h += 0.5
+  ){
+
+    const whole =
+      Math.floor(h);
+
+
+    const hasHalf =
+      (h - whole)
+      >= 0.5 - 1e-9;
+
+
+    opts.push(`
+
+      <option value="${h}">
+
+        ${whole}
+        ${hasHalf ? ' hour 30 min' : ' hour' + (whole === 1 ? '' : 's')}
+
+      </option>
+
+    `);
+
+  }
+
+
+  sel.innerHTML =
+    opts.join('');
+
+}
+
+
+/* =========================================================
+   TOGGLE FORM
+========================================================= */
+
+function togglePlAddForm(){
+
+  const form =
+    document.getElementById(
+      'plAddForm'
+    );
+
+
+  const btn =
+    document.getElementById(
+      'plAddToggle'
+    );
+
+
+  if(!form)
+    return;
+
+
+  const opening =
+    form.style.display === 'none';
+
+
+  form.style.display =
+    opening
+      ? 'grid'
+      : 'none';
+
+
+  if(btn){
+
+    btn.textContent =
+      opening
+        ? '− Cancel'
+        : '+ Add Leave Record';
+
+
+    btn.classList.toggle(
+      'open',
+      opening
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TOGGLE UNIT
+========================================================= */
+
+function togglePlUnit(){
+
+  const unit =
+    document.getElementById(
+      'plUnit'
+    ).value;
+
+
+  const daysField =
+    document.getElementById(
+      'plDaysField'
+    );
+
+
+  const hoursField =
+    document.getElementById(
+      'plHoursField'
+    );
+
+
+  if(unit === 'hours'){
+
+    plPopulateHoursInput();
+
+
+    daysField.style.display =
+      'none';
+
+
+    hoursField.style.display =
+      'flex';
+
+  }else{
+
+    daysField.style.display =
+      'flex';
+
+
+    hoursField.style.display =
+      'none';
+
+  }
+
+}
+
+
+/* =========================================================
+   ADD RECORD
+========================================================= */
+
+async function addPlRecord(){
+
+  const type =
+    document.getElementById(
+      'plType'
+    ).value;
+
+
+  const date =
+    document.getElementById(
+      'plDate'
+    ).value;
+
+
+  const unit =
+    document.getElementById(
+      'plUnit'
+    ).value;
+
+
+  const amount =
+    unit === 'hours'
+      ? Number(
+          document.getElementById(
+            'plHours'
+          ).value
+        )
+      : Number(
+          document.getElementById(
+            'plDays'
+          ).value
+        );
+
+
+  const remark =
+    document.getElementById(
+      'plRemark'
+    ).value.trim();
+
+
+  if(
+    !date ||
+    !amount ||
+    amount <= 0
+  ){
+
+    alert(
+      'Please enter the date and leave duration.'
+    );
+
+    return;
+
+  }
+
+
+  const addBtn =
+    document.querySelector(
+      '.pl-add-btn'
+    );
+
+
+  if(addBtn){
+
+    addBtn.disabled = true;
+
+    addBtn.textContent =
+      'Saving...';
+
+  }
+
+
+  try{
+
+    const result =
+      await apiPost({
+
+        action:
+          'addLeaveRecord',
+
+        type,
+
+        date,
+
+        unit,
+
+        amount,
+
+        remark
+
+      });
+
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        'Unable to add record.'
+      );
+
+    }
+
+
+    document.getElementById(
+      'plDate'
+    ).value = '';
+
+
+    document.getElementById(
+      'plDays'
+    ).value = '';
+
+
+    document.getElementById(
+      'plRemark'
+    ).value = '';
+
+
+    const form =
+      document.getElementById(
+        'plAddForm'
+      );
+
+
+    const btn =
+      document.getElementById(
+        'plAddToggle'
+      );
+
+
+    form.style.display =
+      'none';
+
+
+    btn.textContent =
+      '+ Add Leave Record';
+
+
+    btn.classList.remove(
+      'open'
+    );
+
+
+    showStatus(
+      'Leave record added.',
+      'success'
+    );
+
+
+    await loadData();
+
+  }catch(err){
+
+    console.error(err);
+
+    showStatus(
+      err.message ||
+      'Unable to add leave record.',
+      'error'
+    );
+
+  }finally{
+
+    if(addBtn){
+
+      addBtn.disabled = false;
+
+      addBtn.textContent =
+        '+ Add Record';
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE RECORD
+========================================================= */
+
+async function plDeleteRecord(id){
+
+  if(
+    !confirm(
+      'Delete this leave record?'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const result =
+      await apiPost({
+
+        action:
+          'deleteLeaveRecord',
+
+        id
+
+      });
+
+
+    if(
+      result &&
+      result.success === false
+    ){
+
+      throw new Error(
+        result.error ||
+        'Unable to delete record.'
+      );
+
+    }
+
+
+    showStatus(
+      'Leave record deleted.',
+      'success'
+    );
+
+
+    await loadData();
+
+  }catch(err){
+
+    console.error(err);
+
+    showStatus(
+      err.message ||
+      'Unable to delete leave record.',
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   API GET
+========================================================= */
+
+async function apiGet(){
+
+  const res =
+    await fetch(
+      CONFIG.API_URL,
+      {
+        method:'GET',
+        cache:'no-store'
+      }
+    );
+
+
+  if(!res.ok){
+
+    throw new Error(
+      'API request failed: ' +
+      res.status
+    );
+
+  }
+
+
+  const data =
+    await res.json();
+
+
+  if(
+    data &&
+    data.success === false
+  ){
+
+    throw new Error(
+      data.error ||
+      'API returned an error.'
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =========================================================
+   API POST
+========================================================= */
+
+async function apiPost(payload){
+
+  const res =
+    await fetch(
+      CONFIG.API_URL,
+      {
+
+        method:'POST',
+
+        headers:{
+          'Content-Type':
+            'text/plain;charset=utf-8'
+        },
+
+        body:
+          JSON.stringify(payload)
+
+      }
+    );
+
+
+  if(!res.ok){
+
+    throw new Error(
+      'API request failed: ' +
+      res.status
+    );
+
+  }
+
+
+  const data =
+    await res.json();
+
+
+  if(
+    data &&
+    data.success === false
+  ){
+
+    throw new Error(
+      data.error ||
+      'API returned an error.'
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData(){
+
+  const grid =
+    document.getElementById(
+      'plLeaveGrid'
+    );
+
+
+  try{
+
+    const data =
+      await apiGet();
+
+
+    STATE = {
+
+      leaveRecords:
+        Array.isArray(
+          data.leaveRecords
+        )
+          ? data.leaveRecords
+          : [],
+
+      leaveSettings:
+        data.leaveSettings || null
+
+    };
+
+
+    renderPersonalLeave();
+
+
+  }catch(err){
+
+    console.error(
+      'Failed to load leave data:',
+      err
+    );
+
+
+    if(grid){
+
+      grid.innerHTML = `
+
+        <div
+          style="
+            grid-column:1/-1;
+            text-align:center;
+            padding:30px;
+            color:#D6484B;
+          ">
+
+          Could not connect to
+          Personal Leave database.
+
+          <br><br>
+
+          <small>
+            Check Apps Script deployment
+            and Web App access.
+          </small>
+
+        </div>
+
+      `;
+
+    }
+
+
+    const records =
+      document.getElementById(
+        'plRecords'
+      );
+
+
+    if(records){
+
+      records.innerHTML = `
+
+        <div
+          class="empty"
+          style="
+            text-align:center;
+            padding:14px 0;
+          ">
+
+          Could not load leave records.
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDate(dateString){
+
+  if(!dateString)
+    return '—';
+
+
+  const d =
+    new Date(dateString);
+
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+
+    return dateString;
+
+  }
+
+
+  return d.toLocaleDateString(
+    'en-MY',
+    {
+
+      day:'2-digit',
+
+      month:'short',
+
+      year:'numeric'
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ''
+  )
+
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+
+    .replace(
+      /</g,
+      '&lt;'
+    )
+
+    .replace(
+      />/g,
+      '&gt;'
+    )
+
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+
+    .replace(
+      /'/g,
+      '&#039;'
+    );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+  message,
+  type='success'
+){
+
+  const el =
+    document.getElementById(
+      'statusMessage'
+    );
+
+
+  if(!el)
+    return;
+
+
+  el.textContent =
+    message;
+
+
+  el.className =
+    'status show ' +
+    type;
+
+
+  clearTimeout(
+    showStatus.timer
+  );
+
+
+  showStatus.timer =
+    setTimeout(
+      () => {
+
+        el.className =
+          'status';
+
+      },
+      3000
+    );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+
+    plPopulateHoursInput();
+
+    loadData();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
