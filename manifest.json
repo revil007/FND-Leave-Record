@@ -2,7 +2,7 @@
   "name": "FND Personal Leave",
   "short_name": "FND Leave",
   "description": "Personal Leave Record",
-  "start_url": "./personal-leave.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

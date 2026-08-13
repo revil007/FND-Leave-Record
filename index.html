@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/fnd-180.png">
+
+<meta name="theme-color" content="#151C27">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FND Leave">
+
 
 <title>Personal Leave Record</title>
 
@@ -1193,13 +1202,26 @@ select{
 
     </div>
 
-    <button
-      class="pl-settings-btn"
-      onclick="plShowSettings()"
-      title="Leave Settings"
-      aria-label="Leave Settings">
-      ⚙
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+
+      <button
+        id="plInstallBtn"
+        class="pl-settings-btn"
+        onclick="installPersonalLeaveApp()"
+        title="Install FND Leave App"
+        aria-label="Install FND Leave App">
+        <span style="font-size:16px;">⇩</span>
+      </button>
+
+      <button
+        class="pl-settings-btn"
+        onclick="plShowSettings()"
+        title="Leave Settings"
+        aria-label="Leave Settings">
+        ⚙
+      </button>
+
+    </div>
 
   </header>
 
@@ -3514,6 +3536,173 @@ function showStatus(
 }
 
 
+
+/* =========================================================
+   PWA / INSTALL APP
+========================================================= */
+
+let plDeferredInstallPrompt = null;
+
+function plIsStandalone(){
+
+  return (
+    (window.matchMedia &&
+     window.matchMedia('(display-mode: standalone)').matches) ||
+    window.navigator.standalone === true
+  );
+
+}
+
+window.addEventListener('beforeinstallprompt', (event) => {
+
+  event.preventDefault();
+
+  plDeferredInstallPrompt = event;
+
+  const btn =
+    document.getElementById('plInstallBtn');
+
+  if(btn){
+    btn.style.display = 'flex';
+  }
+
+});
+
+window.addEventListener('appinstalled', () => {
+
+  plDeferredInstallPrompt = null;
+
+  const btn =
+    document.getElementById('plInstallBtn');
+
+  if(btn){
+    btn.style.display = 'none';
+  }
+
+  showStatus(
+    'FND Leave App installed.',
+    'success'
+  );
+
+});
+
+async function installPersonalLeaveApp(){
+
+  // Android / Chrome / Edge / supported browsers
+  if(plDeferredInstallPrompt){
+
+    try{
+
+      plDeferredInstallPrompt.prompt();
+
+      const choice =
+        await plDeferredInstallPrompt.userChoice;
+
+      if(choice.outcome === 'accepted'){
+
+        showStatus(
+          'Installing FND Leave App...',
+          'success'
+        );
+
+      }
+
+    }catch(error){
+
+      console.error(
+        'Install prompt error:',
+        error
+      );
+
+    }finally{
+
+      plDeferredInstallPrompt = null;
+
+    }
+
+    return;
+
+  }
+
+  // iPhone / iPad
+  const isIOS =
+    /iphone|ipad|ipod/i.test(
+      navigator.userAgent
+    );
+
+  if(isIOS){
+
+    alert(
+      'Untuk iPhone/iPad:\\n\\n' +
+      '1. Tekan Share (□↑).\\n' +
+      '2. Pilih “Add to Home Screen”.\\n' +
+      '3. Tekan “Add”.\\n\\n' +
+      'Icon FND Leave akan muncul di Home Screen.'
+    );
+
+    return;
+
+  }
+
+  // Browser fallback
+  alert(
+    'Install App belum tersedia dalam browser ini.\\n\\n' +
+    'Pastikan kamu membuka FND Leave melalui HTTPS GitHub Pages, ' +
+    'bukan fail HTML terus dari komputer.\\n\\n' +
+    'Kemudian buka menu browser dan pilih “Install app” ' +
+    'atau “Add to Home screen”.'
+  );
+
+}
+
+function plUpdateInstallButton(){
+
+  const btn =
+    document.getElementById('plInstallBtn');
+
+  if(!btn)
+    return;
+
+  if(plIsStandalone()){
+
+    btn.style.display = 'none';
+
+  }else{
+
+    btn.style.display = 'flex';
+
+  }
+
+}
+
+/* Register service worker. Required for reliable PWA installation. */
+if('serviceWorker' in navigator){
+
+  window.addEventListener('load', () => {
+
+    navigator.serviceWorker
+      .register('./sw.js')
+      .then(registration => {
+
+        console.log(
+          'FND Leave Service Worker registered:',
+          registration.scope
+        );
+
+      })
+      .catch(error => {
+
+        console.error(
+          'FND Leave Service Worker registration failed:',
+          error
+        );
+
+      });
+
+  });
+
+}
+
 /* =========================================================
    START
 ========================================================= */
@@ -3523,6 +3712,8 @@ document.addEventListener(
   () => {
 
     plPopulateHoursInput();
+
+    plUpdateInstallButton();
 
     loadData();
 
