@@ -55,6 +55,44 @@
     0 24px 60px rgba(0,0,0,.55);
 }
 
+:root[data-theme="light"]{
+  --bg:#F3F5F9;
+  --surface:#FFFFFF;
+  --card:#FFFFFF;
+  --card-2:#F6F7FB;
+  --border:rgba(15,23,42,.09);
+  --border-strong:rgba(15,23,42,.18);
+
+  --text:#151B2B;
+  --text-dim:#3C4557;
+  --muted:#6B7386;
+  --muted-2:#9AA1B2;
+
+  --accent:#4A5FE0;
+  --accent-soft:rgba(74,95,224,.12);
+
+  --red:#DC2626;
+  --red-bg:rgba(220,38,38,.09);
+  --green:#16A34A;
+  --green-bg:rgba(22,163,74,.09);
+
+  --shadow-sm:
+    0 1px 3px rgba(15,23,42,.06);
+
+  --shadow-md:
+    0 8px 20px rgba(15,23,42,.08);
+
+  --shadow-lg:
+    0 20px 46px rgba(15,23,42,.16);
+}
+
+:root[data-theme="light"] .pl-field select,
+:root[data-theme="light"] .pl-field input,
+:root[data-theme="light"] .pl-setting-inputs input,
+:root[data-theme="light"] .pl-setting-inputs select{
+  color-scheme:light;
+}
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -1114,6 +1152,50 @@ select{
   color:var(--muted);
 }
 
+/* =========================================================
+   SEGMENTED CONTROL — language / theme
+========================================================= */
+
+.pl-seg{
+  display:flex;
+  gap:3px;
+
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+
+  padding:3px;
+}
+
+.pl-seg-btn{
+  -webkit-appearance:none;
+  appearance:none;
+
+  border:0;
+  border-radius:7px;
+
+  padding:7px 13px;
+
+  background:transparent;
+  color:var(--muted);
+
+  font-size:11.5px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.pl-seg-btn.active{
+  background:var(--accent);
+  color:#fff;
+}
+
+.pl-seg-btn:active{
+  transform:scale(.95);
+}
+
 .pl-settings-actions{
   display:flex;
 
@@ -1327,7 +1409,7 @@ select{
 
         <div class="pl-header-title-wrap">
 
-          <div class="title">
+          <div class="title" id="plHeaderTitle" data-i18n="header_title">
             FND Personal Leave Record
           </div>
 
@@ -1395,7 +1477,7 @@ select{
       class="pl-leave-grid"
       id="plLeaveGrid">
 
-      <div class="loading">
+      <div class="loading" data-i18n="balance_loading">
         Loading leave balance...
       </div>
 
@@ -1423,25 +1505,25 @@ select{
 
         <div class="pl-field">
 
-          <label for="plType">
+          <label for="plType" data-i18n="field_leave_type">
             Leave Type
           </label>
 
           <select id="plType">
 
-            <option>
+            <option value="Annual Leave" data-i18n="type_annual">
               Annual Leave
             </option>
 
-            <option>
+            <option value="Medical Leave" data-i18n="type_medical">
               Medical Leave
             </option>
 
-            <option>
+            <option value="Hospitalization" data-i18n="type_hosp">
               Hospitalization
             </option>
 
-            <option>
+            <option value="Compassionate Leave" data-i18n="type_compassionate">
               Compassionate Leave
             </option>
 
@@ -1452,7 +1534,7 @@ select{
 
         <div class="pl-field">
 
-          <label for="plDate">
+          <label for="plDate" data-i18n="field_date">
             Date
           </label>
 
@@ -1465,7 +1547,7 @@ select{
 
         <div class="pl-field pl-field-narrow">
 
-          <label for="plUnit">
+          <label for="plUnit" data-i18n="field_unit">
             Unit
           </label>
 
@@ -1473,11 +1555,11 @@ select{
             id="plUnit"
             onchange="togglePlUnit()">
 
-            <option value="days">
+            <option value="days" data-i18n="unit_days">
               Days
             </option>
 
-            <option value="hours">
+            <option value="hours" data-i18n="unit_hours">
               Hours
             </option>
 
@@ -1490,7 +1572,7 @@ select{
           class="pl-field pl-field-narrow"
           id="plDaysField">
 
-          <label for="plDays">
+          <label for="plDays" data-i18n="field_days">
             Days
           </label>
 
@@ -1509,7 +1591,7 @@ select{
           id="plHoursField"
           style="display:none;">
 
-          <label for="plHours">
+          <label for="plHours" data-i18n="field_duration">
             Duration
           </label>
 
@@ -1520,13 +1602,14 @@ select{
 
         <div class="pl-field pl-field-wide">
 
-          <label for="plRemark">
+          <label for="plRemark" data-i18n="field_remarks">
             Remarks
           </label>
 
           <input
             type="text"
             id="plRemark"
+            data-i18n-placeholder="field_remarks_placeholder"
             placeholder="Optional">
 
         </div>
@@ -1534,7 +1617,8 @@ select{
 
         <button
           class="pl-add-btn"
-          onclick="addPlRecord()">
+          onclick="addPlRecord()"
+          data-i18n="add_btn">
 
           + Add Record
 
@@ -1557,7 +1641,7 @@ select{
 
       <div class="pl-records-head">
 
-        <strong>
+        <strong data-i18n="records_title">
           Recent Leave Records
         </strong>
 
@@ -1565,7 +1649,7 @@ select{
 
       <div id="plRecords">
 
-        <div class="loading">
+        <div class="loading" data-i18n="records_loading">
           Loading records...
         </div>
 
@@ -1615,7 +1699,7 @@ select{
     aria-label="Settings">
 
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    <span>Settings</span>
+    <span data-i18n="nav_settings">Settings</span>
 
   </button>
 
@@ -1634,6 +1718,202 @@ const CONFIG = {
     'https://script.google.com/macros/s/AKfycbxUO9L21XdRmb0k9ig6Svd7Eq-RD1J8vKn5vagZons0IcimbWGu8-D-QhGC_NOXbnY/exec'
 
 };
+
+
+/* =========================================================
+   LANGUAGE (EN / BM) & THEME (DARK / LIGHT)
+========================================================= */
+
+let PL_LANG =
+  localStorage.getItem('plLang') || 'en';
+
+let PL_THEME =
+  localStorage.getItem('plTheme') || 'dark';
+
+
+const PL_I18N = {
+
+  en:{
+    header_title:'FND Personal Leave Record',
+    nav_records:'Records',
+    nav_home:'Home',
+    nav_settings:'Settings',
+    available:'AVAILABLE',
+    available_now:'AVAILABLE NOW',
+    add_toggle_open:'+ Add Leave Record',
+    add_toggle_close:'− Cancel',
+    add_btn:'+ Add Record',
+    add_btn_saving:'Saving...',
+    field_leave_type:'Leave Type',
+    field_date:'Date',
+    field_unit:'Unit',
+    field_days:'Days',
+    field_duration:'Duration',
+    field_remarks:'Remarks',
+    field_remarks_placeholder:'Optional',
+    unit_days:'Days',
+    unit_hours:'Hours',
+    records_title:'Recent Leave Records',
+    records_loading:'Loading records...',
+    records_empty:'No leave records yet',
+    balance_loading:'Loading leave balance...',
+    modal_leave_details:'Leave details',
+    detail_entitlement:'Entitlement',
+    detail_used:'Used',
+    detail_carried:'Carried Forward',
+    detail_already_used:'Already Used',
+    note_annual_accrual:'Monthly accrual updates automatically.',
+    settings_title:'Leave Settings',
+    settings_sub:'Manage leave entitlement',
+    settings_preferences:'Preferences',
+    settings_language:'Language',
+    settings_theme:'Appearance',
+    theme_dark:'Dark',
+    theme_light:'Light',
+    settings_entitlement_title:'Leave Entitlement',
+    setting_annual_desc:'Annual entitlement',
+    unit_days_suffix:'days',
+    unit_hours_suffix:'hours',
+    setting_carry_desc:'Balance carried over',
+    setting_opening_desc:'Leave taken before tracker',
+    btn_cancel:'Cancel',
+    btn_save:'Save',
+    btn_saving:'Saving...',
+    type_annual:'Annual Leave',
+    type_medical:'Medical Leave',
+    type_hosp:'Hospitalization',
+    type_compassionate:'Compassionate Leave',
+    confirm_delete_record:'Delete this leave record?',
+    msg_settings_saved:'Leave settings saved.',
+    msg_settings_save_error:'Unable to save leave settings.',
+    msg_record_added:'Leave record added.',
+    msg_record_add_error:'Unable to add leave record.',
+    msg_record_deleted:'Leave record deleted.',
+    msg_record_delete_error:'Unable to delete leave record.',
+    msg_enter_date_duration:'Please enter the date and leave duration.',
+    msg_app_installed:'FND Leave App installed.',
+    msg_installing:'Installing FND Leave App...',
+    ios_install_instructions:
+      'For iPhone/iPad:\n\n' +
+      '1. Tap Share (□↑).\n' +
+      '2. Choose "Add to Home Screen".\n' +
+      '3. Tap "Add".\n\n' +
+      'The FND Leave icon will appear on your Home Screen.',
+    browser_install_fallback:
+      'Install App is not yet available in this browser.\n\n' +
+      'Make sure you open FND Leave via HTTPS GitHub Pages, ' +
+      'not directly from a local HTML file.\n\n' +
+      'Then open the browser menu and choose "Install app" ' +
+      'or "Add to Home screen".'
+  },
+
+  ms:{
+    header_title:'Rekod Cuti Peribadi FND',
+    nav_records:'Rekod',
+    nav_home:'Utama',
+    nav_settings:'Tetapan',
+    available:'BAKI',
+    available_now:'BAKI SEKARANG',
+    add_toggle_open:'+ Tambah Rekod Cuti',
+    add_toggle_close:'− Batal',
+    add_btn:'+ Tambah Rekod',
+    add_btn_saving:'Menyimpan...',
+    field_leave_type:'Jenis Cuti',
+    field_date:'Tarikh',
+    field_unit:'Unit',
+    field_days:'Hari',
+    field_duration:'Tempoh',
+    field_remarks:'Catatan',
+    field_remarks_placeholder:'Pilihan',
+    unit_days:'Hari',
+    unit_hours:'Jam',
+    records_title:'Rekod Cuti Terkini',
+    records_loading:'Memuatkan rekod...',
+    records_empty:'Tiada rekod cuti lagi',
+    balance_loading:'Memuatkan baki cuti...',
+    modal_leave_details:'Butiran cuti',
+    detail_entitlement:'Kelayakan',
+    detail_used:'Digunakan',
+    detail_carried:'Bawa Kehadapan',
+    detail_already_used:'Telah Digunakan',
+    note_annual_accrual:'Kemaskini akruan bulanan automatik.',
+    settings_title:'Tetapan Cuti',
+    settings_sub:'Urus kelayakan cuti',
+    settings_preferences:'Keutamaan',
+    settings_language:'Bahasa',
+    settings_theme:'Paparan',
+    theme_dark:'Gelap',
+    theme_light:'Terang',
+    settings_entitlement_title:'Kelayakan Cuti',
+    setting_annual_desc:'Kelayakan tahunan',
+    unit_days_suffix:'hari',
+    unit_hours_suffix:'jam',
+    setting_carry_desc:'Baki dibawa kehadapan',
+    setting_opening_desc:'Cuti diambil sebelum sistem digunakan',
+    btn_cancel:'Batal',
+    btn_save:'Simpan',
+    btn_saving:'Menyimpan...',
+    type_annual:'Cuti Tahunan',
+    type_medical:'Cuti Sakit',
+    type_hosp:'Cuti Hospital',
+    type_compassionate:'Cuti Simpati',
+    confirm_delete_record:'Padam rekod cuti ini?',
+    msg_settings_saved:'Tetapan cuti disimpan.',
+    msg_settings_save_error:'Tidak dapat simpan tetapan cuti.',
+    msg_record_added:'Rekod cuti ditambah.',
+    msg_record_add_error:'Tidak dapat tambah rekod cuti.',
+    msg_record_deleted:'Rekod cuti dipadam.',
+    msg_record_delete_error:'Tidak dapat padam rekod cuti.',
+    msg_enter_date_duration:'Sila masukkan tarikh dan tempoh cuti.',
+    msg_app_installed:'Aplikasi FND Leave dipasang.',
+    msg_installing:'Memasang Aplikasi FND Leave...',
+    ios_install_instructions:
+      'Untuk iPhone/iPad:\n\n' +
+      '1. Tekan Share (□↑).\n' +
+      '2. Pilih "Add to Home Screen".\n' +
+      '3. Tekan "Add".\n\n' +
+      'Icon FND Leave akan muncul di Home Screen.',
+    browser_install_fallback:
+      'Install App belum tersedia dalam pelayar ini.\n\n' +
+      'Pastikan anda membuka FND Leave melalui HTTPS GitHub Pages, ' +
+      'bukan fail HTML terus dari komputer.\n\n' +
+      'Kemudian buka menu pelayar dan pilih "Install app" ' +
+      'atau "Add to Home screen".'
+  }
+
+};
+
+
+function t(key){
+
+  return (
+    (PL_I18N[PL_LANG] && PL_I18N[PL_LANG][key]) ||
+    PL_I18N.en[key] ||
+    key
+  );
+
+}
+
+
+const PL_TYPE_KEYS = {
+
+  'Annual Leave':'type_annual',
+  'Medical Leave':'type_medical',
+  'Hospitalization':'type_hosp',
+  'Compassionate Leave':'type_compassionate'
+
+};
+
+
+function plTypeLabel(type){
+
+  const key = PL_TYPE_KEYS[type];
+
+  return key
+    ? t(key)
+    : escapeHtml(type);
+
+}
 
 
 /* =========================================================
@@ -1695,7 +1975,7 @@ const PL_ICONS = {
 };
 
 
-const PL_ACCENTS = {
+const PL_ACCENTS_DARK = {
 
   'Annual Leave':
     ['#818CF8','rgba(129,140,248,.16)'],
@@ -1710,6 +1990,30 @@ const PL_ACCENTS = {
     ['#C4B5FD','rgba(196,181,253,.16)']
 
 };
+
+const PL_ACCENTS_LIGHT = {
+
+  'Annual Leave':
+    ['#4338CA','rgba(67,56,202,.10)'],
+
+  'Medical Leave':
+    ['#047857','rgba(4,120,87,.10)'],
+
+  'Hospitalization':
+    ['#BE123C','rgba(190,18,60,.10)'],
+
+  'Compassionate Leave':
+    ['#6D28D9','rgba(109,40,217,.10)']
+
+};
+
+function getPlAccents(){
+
+  return PL_THEME === 'light'
+    ? PL_ACCENTS_LIGHT
+    : PL_ACCENTS_DARK;
+
+}
 
 
 const PL_DEFAULT_SETTINGS = {
@@ -2117,7 +2421,7 @@ function renderPersonalLeave(){
           accent,
           bg
         ] =
-          PL_ACCENTS[type];
+          getPlAccents()[type];
 
 
         const balance =
@@ -2150,7 +2454,7 @@ function renderPersonalLeave(){
             </div>
 
             <div class="pl-available">
-              AVAILABLE
+              ${t('available')}
             </div>
 
             <div class="pl-arrow">
@@ -2201,7 +2505,7 @@ function renderPlRecords(){
           padding:14px 0;
         ">
 
-        No leave records yet
+        ${t('records_empty')}
 
       </div>
 
@@ -2233,7 +2537,7 @@ function renderPlRecords(){
           <div class="pl-line-left">
 
             <b>
-              ${escapeHtml(r.type)}
+              ${plTypeLabel(r.type)}
             </b>
 
             <div class="pl-line-muted">
@@ -2313,7 +2617,7 @@ function plShowDetails(type){
     accent,
     bg
   ] =
-    PL_ACCENTS[type];
+    getPlAccents()[type];
 
 
   const overlay =
@@ -2370,11 +2674,11 @@ function plShowDetails(type){
         <div>
 
           <div class="pl-modal-title">
-            ${type}
+            ${plTypeLabel(type)}
           </div>
 
           <div class="pl-modal-sub">
-            Leave details
+            ${t('modal_leave_details')}
           </div>
 
         </div>
@@ -2385,7 +2689,7 @@ function plShowDetails(type){
       <div class="pl-available-box">
 
         <span>
-          AVAILABLE NOW
+          ${t('available_now')}
         </span>
 
         <strong>
@@ -2400,7 +2704,7 @@ function plShowDetails(type){
         <div class="pl-detail">
 
           <span>
-            Entitlement
+            ${t('detail_entitlement')}
           </span>
 
           <strong>
@@ -2413,7 +2717,7 @@ function plShowDetails(type){
         <div class="pl-detail">
 
           <span>
-            Used
+            ${t('detail_used')}
           </span>
 
           <strong>
@@ -2426,7 +2730,7 @@ function plShowDetails(type){
         <div class="pl-detail">
 
           <span>
-            Carried Forward
+            ${t('detail_carried')}
           </span>
 
           <strong>
@@ -2439,7 +2743,7 @@ function plShowDetails(type){
         <div class="pl-detail">
 
           <span>
-            Already Used
+            ${t('detail_already_used')}
           </span>
 
           <strong>
@@ -2456,8 +2760,7 @@ function plShowDetails(type){
           ? `
             <div class="pl-note">
 
-              Monthly accrual updates
-              automatically.
+              ${t('note_annual_accrual')}
 
             </div>
           `
@@ -2544,7 +2847,7 @@ function plShowSettings(){
                 : ''
             }>
 
-            ${h} hours
+            ${h} ${t('unit_hours_suffix')}
 
           </option>
 
@@ -2577,11 +2880,11 @@ function plShowSettings(){
         <div>
 
           <div class="pl-modal-title">
-            Leave Settings
+            ${t('settings_title')}
           </div>
 
           <div class="pl-modal-sub">
-            Manage leave entitlement
+            ${t('settings_sub')}
           </div>
 
         </div>
@@ -2590,7 +2893,69 @@ function plShowSettings(){
 
 
       <div class="pl-settings-section-title">
-        Leave Entitlement
+        ${t('settings_preferences')}
+      </div>
+
+
+      <div class="pl-settings-list">
+
+        <div class="pl-setting-row">
+
+          <div class="pl-setting-name">
+            ${t('settings_language')}
+          </div>
+
+          <div class="pl-seg">
+
+            <button
+              type="button"
+              class="pl-seg-btn ${PL_LANG === 'en' ? 'active' : ''}"
+              onclick="plSetLanguage('en')">
+              EN
+            </button>
+
+            <button
+              type="button"
+              class="pl-seg-btn ${PL_LANG === 'ms' ? 'active' : ''}"
+              onclick="plSetLanguage('ms')">
+              BM
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="pl-setting-row">
+
+          <div class="pl-setting-name">
+            ${t('settings_theme')}
+          </div>
+
+          <div class="pl-seg">
+
+            <button
+              type="button"
+              class="pl-seg-btn ${PL_THEME === 'dark' ? 'active' : ''}"
+              onclick="plSetTheme('dark')">
+              ${t('theme_dark')}
+            </button>
+
+            <button
+              type="button"
+              class="pl-seg-btn ${PL_THEME === 'light' ? 'active' : ''}"
+              onclick="plSetTheme('light')">
+              ${t('theme_light')}
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="pl-settings-section-title">
+        ${t('settings_entitlement_title')}
       </div>
 
 
@@ -2602,11 +2967,11 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Annual Leave
+              ${t('type_annual')}
             </div>
 
             <div class="pl-setting-desc">
-              Annual entitlement
+              ${t('setting_annual_desc')}
             </div>
 
           </div>
@@ -2621,7 +2986,7 @@ function plShowSettings(){
               value="${s.annual}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
           </div>
@@ -2634,7 +2999,7 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Medical Leave
+              ${t('type_medical')}
             </div>
 
           </div>
@@ -2649,7 +3014,7 @@ function plShowSettings(){
               value="${s.medical}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
           </div>
@@ -2662,7 +3027,7 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Hospitalization
+              ${t('type_hosp')}
             </div>
 
           </div>
@@ -2677,7 +3042,7 @@ function plShowSettings(){
               value="${s.hospitalization}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
           </div>
@@ -2690,7 +3055,7 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Compassionate Leave
+              ${t('type_compassionate')}
             </div>
 
           </div>
@@ -2705,7 +3070,7 @@ function plShowSettings(){
               value="${s.compassionate}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
           </div>
@@ -2716,7 +3081,7 @@ function plShowSettings(){
 
 
       <div class="pl-settings-section-title">
-        Annual Leave
+        ${t('type_annual')}
       </div>
 
 
@@ -2728,11 +3093,11 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Carried Forward
+              ${t('detail_carried')}
             </div>
 
             <div class="pl-setting-desc">
-              Balance carried over
+              ${t('setting_carry_desc')}
             </div>
 
           </div>
@@ -2748,7 +3113,7 @@ function plShowSettings(){
               value="${s.carryDays}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
             <select
@@ -2768,11 +3133,11 @@ function plShowSettings(){
           <div>
 
             <div class="pl-setting-name">
-              Already Used
+              ${t('detail_already_used')}
             </div>
 
             <div class="pl-setting-desc">
-              Leave taken before tracker
+              ${t('setting_opening_desc')}
             </div>
 
           </div>
@@ -2788,7 +3153,7 @@ function plShowSettings(){
               value="${s.openingUsed}">
 
             <span>
-              days
+              ${t('unit_days_suffix')}
             </span>
 
             <select
@@ -2817,7 +3182,7 @@ function plShowSettings(){
               .remove()
           ">
 
-          Cancel
+          ${t('btn_cancel')}
 
         </button>
 
@@ -2826,7 +3191,7 @@ function plShowSettings(){
           class="pl-settings-save"
           onclick="plSaveSettings()">
 
-          Save
+          ${t('btn_save')}
 
         </button>
 
@@ -2922,7 +3287,7 @@ async function plSaveSettings(){
     saveBtn.disabled = true;
 
     saveBtn.textContent =
-      'Saving...';
+      t('btn_saving');
 
   }
 
@@ -2964,7 +3329,7 @@ async function plSaveSettings(){
 
 
     showStatus(
-      'Leave settings saved.',
+      t('msg_settings_saved'),
       'success'
     );
 
@@ -2977,7 +3342,7 @@ async function plSaveSettings(){
 
     showStatus(
       err.message ||
-      'Unable to save leave settings.',
+      t('msg_settings_save_error'),
       'error'
     );
 
@@ -2987,7 +3352,7 @@ async function plSaveSettings(){
       saveBtn.disabled = false;
 
       saveBtn.textContent =
-        'Save';
+        t('btn_save');
 
     }
 
@@ -3090,8 +3455,8 @@ function togglePlAddForm(){
 
     btn.textContent =
       opening
-        ? '− Cancel'
-        : '+ Add Leave Record';
+        ? t('add_toggle_close')
+        : t('add_toggle_open');
 
 
     btn.classList.toggle(
@@ -3110,11 +3475,15 @@ function togglePlAddForm(){
 
 let plCurrentView = 'home';
 
-const PL_NAV_ICON_RECORDS =
-  '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>Records</span>';
+function plNavIconRecords(){
+  return '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>' +
+    t('nav_records') + '</span>';
+}
 
-const PL_NAV_ICON_HOME =
-  '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span>';
+function plNavIconHome(){
+  return '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>' +
+    t('nav_home') + '</span>';
+}
 
 function plShowView(view){
 
@@ -3135,8 +3504,8 @@ function plShowView(view){
     if(records) records.style.display = 'block';
 
     if(btn){
-      btn.innerHTML = PL_NAV_ICON_HOME;
-      btn.setAttribute('aria-label','Back to leave balance');
+      btn.innerHTML = plNavIconHome();
+      btn.setAttribute('aria-label', t('nav_home'));
     }
 
   }else{
@@ -3145,8 +3514,8 @@ function plShowView(view){
     if(records) records.style.display = 'none';
 
     if(btn){
-      btn.innerHTML = PL_NAV_ICON_RECORDS;
-      btn.setAttribute('aria-label','Recent Leave Records');
+      btn.innerHTML = plNavIconRecords();
+      btn.setAttribute('aria-label', t('nav_records'));
     }
 
   }
@@ -3296,7 +3665,7 @@ async function addPlRecord(){
   ){
 
     alert(
-      'Please enter the date and leave duration.'
+      t('msg_enter_date_duration')
     );
 
     return;
@@ -3315,7 +3684,7 @@ async function addPlRecord(){
     addBtn.disabled = true;
 
     addBtn.textContent =
-      'Saving...';
+      t('add_btn_saving');
 
   }
 
@@ -3386,7 +3755,7 @@ async function addPlRecord(){
 
 
     btn.textContent =
-      '+ Add Leave Record';
+      t('add_toggle_open');
 
 
     btn.classList.remove(
@@ -3395,7 +3764,7 @@ async function addPlRecord(){
 
 
     showStatus(
-      'Leave record added.',
+      t('msg_record_added'),
       'success'
     );
 
@@ -3408,7 +3777,7 @@ async function addPlRecord(){
 
     showStatus(
       err.message ||
-      'Unable to add leave record.',
+      t('msg_record_add_error'),
       'error'
     );
 
@@ -3419,7 +3788,7 @@ async function addPlRecord(){
       addBtn.disabled = false;
 
       addBtn.textContent =
-        '+ Add Record';
+        t('add_btn');
 
     }
 
@@ -3436,7 +3805,7 @@ async function plDeleteRecord(id){
 
   if(
     !confirm(
-      'Delete this leave record?'
+      t('confirm_delete_record')
     )
   ){
 
@@ -3465,14 +3834,14 @@ async function plDeleteRecord(id){
 
       throw new Error(
         result.error ||
-        'Unable to delete record.'
+        t('msg_record_delete_error')
       );
 
     }
 
 
     showStatus(
-      'Leave record deleted.',
+      t('msg_record_deleted'),
       'success'
     );
 
@@ -3485,7 +3854,7 @@ async function plDeleteRecord(id){
 
     showStatus(
       err.message ||
-      'Unable to delete leave record.',
+      t('msg_record_delete_error'),
       'error'
     );
 
@@ -3703,6 +4072,129 @@ async function loadData(){
 
 
 /* =========================================================
+   LANGUAGE — APPLY TO STATIC DOM
+========================================================= */
+
+function plApplyLanguage(){
+
+  document.documentElement.lang =
+    PL_LANG === 'ms' ? 'ms' : 'en';
+
+  document.title =
+    t('header_title');
+
+  document
+    .querySelectorAll('[data-i18n]')
+    .forEach(el => {
+
+      el.textContent =
+        t(el.getAttribute('data-i18n'));
+
+    });
+
+  document
+    .querySelectorAll('[data-i18n-placeholder]')
+    .forEach(el => {
+
+      el.placeholder =
+        t(el.getAttribute('data-i18n-placeholder'));
+
+    });
+
+  const navBtn =
+    document.getElementById('plNavToggle');
+
+  if(navBtn){
+
+    navBtn.innerHTML =
+      plCurrentView === 'records'
+        ? plNavIconHome()
+        : plNavIconRecords();
+
+  }
+
+}
+
+
+/* =========================================================
+   THEME — APPLY DARK / LIGHT
+========================================================= */
+
+function plApplyTheme(){
+
+  if(PL_THEME === 'light'){
+
+    document.documentElement.setAttribute(
+      'data-theme','light'
+    );
+
+  }else{
+
+    document.documentElement.removeAttribute(
+      'data-theme'
+    );
+
+  }
+
+  const metaTheme =
+    document.querySelector('meta[name="theme-color"]');
+
+  if(metaTheme){
+
+    metaTheme.setAttribute(
+      'content',
+      PL_THEME === 'light' ? '#F3F5F9' : '#0A0E16'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PREFERENCE SETTERS (called from Settings modal)
+========================================================= */
+
+function plSetLanguage(lang){
+
+  PL_LANG = lang;
+
+  localStorage.setItem('plLang', lang);
+
+  plApplyLanguage();
+
+  renderPersonalLeave();
+
+  const existing =
+    document.getElementById('plSettingsOverlay');
+
+  if(existing) existing.remove();
+
+  plShowSettings();
+
+}
+
+function plSetTheme(theme){
+
+  PL_THEME = theme;
+
+  localStorage.setItem('plTheme', theme);
+
+  plApplyTheme();
+
+  renderPersonalLeave();
+
+  const existing =
+    document.getElementById('plSettingsOverlay');
+
+  if(existing) existing.remove();
+
+  plShowSettings();
+
+}
+
+
+/* =========================================================
    HEADER LIVE CLOCK
 ========================================================= */
 
@@ -3910,7 +4402,7 @@ window.addEventListener('appinstalled', () => {
   }
 
   showStatus(
-    'FND Leave App installed.',
+    t('msg_app_installed'),
     'success'
   );
 
@@ -3931,7 +4423,7 @@ async function installPersonalLeaveApp(){
       if(choice.outcome === 'accepted'){
 
         showStatus(
-          'Installing FND Leave App...',
+          t('msg_installing'),
           'success'
         );
 
@@ -3963,11 +4455,7 @@ async function installPersonalLeaveApp(){
   if(isIOS){
 
     alert(
-      'Untuk iPhone/iPad:\\n\\n' +
-      '1. Tekan Share (□↑).\\n' +
-      '2. Pilih “Add to Home Screen”.\\n' +
-      '3. Tekan “Add”.\\n\\n' +
-      'Icon FND Leave akan muncul di Home Screen.'
+      t('ios_install_instructions')
     );
 
     return;
@@ -3976,11 +4464,7 @@ async function installPersonalLeaveApp(){
 
   // Browser fallback
   alert(
-    'Install App belum tersedia dalam browser ini.\\n\\n' +
-    'Pastikan kamu membuka FND Leave melalui HTTPS GitHub Pages, ' +
-    'bukan fail HTML terus dari komputer.\\n\\n' +
-    'Kemudian buka menu browser dan pilih “Install app” ' +
-    'atau “Add to Home screen”.'
+    t('browser_install_fallback')
   );
 
 }
@@ -4040,6 +4524,10 @@ if('serviceWorker' in navigator){
 document.addEventListener(
   'DOMContentLoaded',
   () => {
+
+    plApplyTheme();
+
+    plApplyLanguage();
 
     plPopulateHoursInput();
 
